@@ -13,18 +13,22 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @EnableFeignClients(basePackageClasses = OpenAIClient.class)
 @ComponentScan(basePackageClasses = OpenAIClientConfig.class)
-public class CreateStoryService {
+public class StoryService {
 
     private final OpenAIClient openAIClient;
     private final OpenAIClientConfig openAIClientConfig;
 
-    public CreateStoryService(OpenAIClient openAIClient, OpenAIClientConfig openAIClientConfig) {
+    private final StoryDataGateway storyDataGateway;
+
+    public StoryService(OpenAIClient openAIClient, OpenAIClientConfig openAIClientConfig, StoryDataGateway storyDataGateway) {
         this.openAIClient = openAIClient;
         this.openAIClientConfig = openAIClientConfig;
+        this.storyDataGateway = storyDataGateway;
     }
 
     public void createStory() {
@@ -40,6 +44,10 @@ public class CreateStoryService {
                                 Collections.singletonList(new ChatMessage(ChatRole.user, prompt))
                         )
                 );
-        System.out.println(chatCompletionResponse.choices().get(0).message().content());
+
+        String story = Objects.requireNonNullElse(chatCompletionResponse.choices().get(0).message().content(),"");
+        String[] parts = story.split("\n", 2);
+        storyDataGateway.saveStory(parts[0], parts[1]);
+
     }
 }

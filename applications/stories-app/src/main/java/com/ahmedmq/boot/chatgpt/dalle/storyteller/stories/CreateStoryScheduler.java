@@ -1,6 +1,6 @@
 package com.ahmedmq.boot.chatgpt.dalle.storyteller.stories;
 
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.CreateStoryService;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.StoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,15 +12,15 @@ import java.time.Instant;
 public class CreateStoryScheduler {
 
     private final Logger logger = LoggerFactory.getLogger(CreateStoryScheduler.class);
-    private final CreateStoryService createStoryService;
+    private final StoryService storyService;
 
-    public CreateStoryScheduler(CreateStoryService createStoryService) {
-        this.createStoryService = createStoryService;
+    public CreateStoryScheduler(StoryService storyService) {
+        this.storyService = storyService;
     }
 
     @Scheduled(cron = "${stories.create-story.schedule}")
     public void runTask() {
         logger.info("Create Story started at {}", Instant.now());
-        createStoryService.createStory();
+        storyService.createStory();
     }
 }

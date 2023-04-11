@@ -32,7 +32,7 @@ class CreateStoryServiceTest {
     OpenAIClientConfig openAIClientConfig;
 
     @InjectMocks
-    CreateStoryService sut;
+    StoryService sut;
 
     @Test
     void shouldReturnMockOpenAIResponse() {

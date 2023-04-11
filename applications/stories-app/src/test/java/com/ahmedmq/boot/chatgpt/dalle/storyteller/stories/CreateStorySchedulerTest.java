@@ -1,6 +1,6 @@
 package com.ahmedmq.boot.chatgpt.dalle.storyteller.stories;
 
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.CreateStoryService;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.StoryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.verify;
 public class CreateStorySchedulerTest {
 
     @Mock
-    CreateStoryService createStoryService;
+    StoryService storyService;
 
     @InjectMocks
     CreateStoryScheduler createStoryScheduler;
@@ -22,6 +22,6 @@ public class CreateStorySchedulerTest {
     @Test
     void shouldInvokeCreateStoryService() {
         createStoryScheduler.runTask();
-        verify(createStoryService, times(1)).createStory();
+        verify(storyService, times(1)).createStory();
     }
 }

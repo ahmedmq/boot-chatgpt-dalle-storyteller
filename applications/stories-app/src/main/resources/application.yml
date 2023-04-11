@@ -13,3 +13,10 @@ openai:
   urls:
     base-url: https://api.openai.com/v1
     chat-url: /chat/completions
+
+spring:
+  datasource:
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/test
+    driver-class-name: org.postgresql.Driver
