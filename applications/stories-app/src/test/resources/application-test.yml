@@ -1,0 +1,15 @@
+stories:
+  create-story:
+    schedule: 0 19 * * * *
+logging:
+  level:
+    com.ahmedmq.story: DEBUG
+openai:
+  api-key: abc
+  gpt-model: gpt-3.5-turbo
+  http-client:
+    read-timeout: 3000
+    connect-timeout: 3000
+  urls:
+    base-url: <<OVERRIDDEN BY WIREMOCK>>
+    chat-url: /chat/completions

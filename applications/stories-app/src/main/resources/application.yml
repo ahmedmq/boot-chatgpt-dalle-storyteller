@@ -1,0 +1,15 @@
+stories:
+  create-story:
+    schedule: 0 19 * * * *
+logging:
+  level:
+    com.ahmedmq.story: DEBUG
+openai:
+  api-key: ${OPENAI-API-KEY}
+  gpt-model: gpt-3.5-turbo
+  http-client:
+    read-timeout: 3000
+    connect-timeout: 3000
+  urls:
+    base-url: https://api.openai.com/v1
+    chat-url: /chat/completions
