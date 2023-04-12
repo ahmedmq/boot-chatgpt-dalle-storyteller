@@ -26,7 +26,8 @@ class StoryDataGatewayTest {
 
     @Test
     void testSave() {
-        cut.saveStory("title", "description");
+
+        cut.saveStory("title", "description", new String[]{"one"}, "scene" );
         try(final Connection connection = dataSource().getConnection()){
             try(final PreparedStatement statement = connection.prepareStatement(
                     "select * from story"
@@ -36,7 +37,9 @@ class StoryDataGatewayTest {
                     assertThat(resultSet.getLong(1)).isNotNull();
                     assertThat(resultSet.getString(2)).isEqualTo("title");
                     assertThat(resultSet.getString(3)).isEqualTo("description");
-                    assertThat(resultSet.getTimestamp(4)).isNotNull();
+                    assertThat((String[]) resultSet.getArray(4).getArray()).isEqualTo( new String[]{"one"});
+                    assertThat(resultSet.getString(5)).isEqualTo("scene");
+                    assertThat(resultSet.getTimestamp(6)).isNotNull();
                 }
 
             }

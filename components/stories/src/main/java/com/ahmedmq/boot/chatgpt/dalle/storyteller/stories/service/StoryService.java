@@ -32,12 +32,13 @@ public class StoryService {
     }
 
     public void createStory() {
-        List<String> characters = Arrays.asList("Ethan", "Ryan");
+        String[] characters = new String[]{"Ethan", "Ryan"};
+        String scene = "Pair programming together when suddenly powers shuts off";
         String prompt = """
                 Write a title and a rhyming story on %d main characters called %s.
                   The story needs to be set within the scene %s and be at least 200 words long
-                """.formatted(characters.size(), String.join(" and ", characters),
-                "Pair programming together when suddenly powers shuts off");
+                """.formatted(characters.length, String.join(" and ", characters),
+                scene);
         ChatCompletionResponse chatCompletionResponse = this.openAIClient
                 .chat(
                         new ChatCompletionRequest(openAIClientConfig.getModel(),
@@ -47,7 +48,11 @@ public class StoryService {
 
         String story = Objects.requireNonNullElse(chatCompletionResponse.choices().get(0).message().content(),"");
         String[] parts = story.split("\n", 2);
-        storyDataGateway.saveStory(parts[0], parts[1]);
+        if ( parts.length == 2) {
+            storyDataGateway.saveStory(parts[0], parts[1], characters, scene);
+        }else {
+            System.out.println("Unexpected output from OpenAI");
+        }
 
     }
 }
