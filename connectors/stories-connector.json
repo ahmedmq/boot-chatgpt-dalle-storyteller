@@ -1,0 +1,18 @@
+{
+  "name": "stories-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "plugin.name": "pgoutput",
+    "database.hostname": "postgres",
+    "database.port": "5432",
+    "database.user": "debezium",
+    "database.password": "dbz",
+    "database.dbname": "postgres",
+    "database.server.name": "postgres",
+    "table.include.list": "public.story",
+    "column.exclude.list": "public.story.detail",
+    "publication.autocreate.mode": "filtered",
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState"
+  }
+}

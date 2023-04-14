@@ -17,6 +17,6 @@ openai:
 spring:
   datasource:
     username: postgres
-    password: postgres
-    url: jdbc:postgresql://localhost:5432/test
+    password: password
+    url: jdbc:postgresql://localhost:5432/postgres
     driver-class-name: org.postgresql.Driver

@@ -1,0 +1,12 @@
+# LOGGING
+# log_min_error_statement = fatal
+# log_min_messages = DEBUG1
+
+# CONNECTION
+listen_addresses = '*'
+
+
+# REPLICATION
+wal_level = logical
+max_wal_senders = 4
+max_replication_slots = 4
