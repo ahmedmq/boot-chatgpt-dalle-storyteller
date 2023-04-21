@@ -1,7 +1,11 @@
 CREATE ROLE debezium WITH REPLICATION LOGIN ENCRYPTED PASSWORD 'dbz';
-GRANT CREATE ON DATABASE postgres TO debezium;
+GRANT CREATE ON DATABASE "stories-database" TO debezium;
+CREATE SCHEMA stories;
+GRANT USAGE ON SCHEMA stories TO debezium ;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA stories TO debezium;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA stories TO debezium;
 
-create table story
+create table stories.story
 (
     id         serial    not null primary key,
     title      text,
@@ -11,19 +15,19 @@ create table story
     created_at timestamp not null
 );
 
-create table character
+create table stories.character
 (
     id   serial not null primary key,
     name text   not null
 );
 
-create table scene
+create table stories.scene
 (
     id          serial not null primary key,
     description text   not null
 );
 
 CREATE ROLE replication_group;
-GRANT replication_group TO postgres;
+GRANT replication_group TO stories;
 GRANT replication_group TO debezium;
-ALTER TABLE story OWNER TO replication_group;
+ALTER TABLE stories.story OWNER TO replication_group;

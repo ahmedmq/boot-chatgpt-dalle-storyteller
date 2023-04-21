@@ -16,7 +16,9 @@ openai:
 
 spring:
   datasource:
-    username: postgres
+    username: stories
     password: password
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/stories-database
     driver-class-name: org.postgresql.Driver
+server:
+  port: 9090

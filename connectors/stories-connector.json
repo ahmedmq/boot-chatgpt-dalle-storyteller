@@ -7,12 +7,14 @@
     "database.port": "5432",
     "database.user": "debezium",
     "database.password": "dbz",
-    "database.dbname": "postgres",
-    "database.server.name": "postgres",
-    "table.include.list": "public.story",
-    "column.exclude.list": "public.story.detail",
+    "database.dbname": "stories-database",
+    "database.server.name": "stories-database",
+    "table.include.list": "stories.story",
+    "column.exclude.list": "stories.story.detail,stories.story.characters",
     "publication.autocreate.mode": "filtered",
-    "transforms": "unwrap",
-    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState"
+    "transforms": "unwrap,AddNamespace",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.AddNamespace.type" : "org.apache.kafka.connect.transforms.SetSchemaMetadata$Value",
+    "transforms.AddNamespace.schema.name" : "com.ahmedmq.boot.chatgpt.dalle.storyteller.images.StoryEvent"
   }
 }

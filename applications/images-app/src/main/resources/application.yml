@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    schemaRegistryClient:
+      endpoint:  http://localhost:8081/
+    function:
+      definition: storyEventConsumer
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:29092
+          consumer-properties:
+            value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+            schema.registry.url: http://localhost:8081
+            specific.avro.reader: true
+      bindings:
+        storyEventConsumer-in-0:
+          content-type: application/*+avro
+          destination: stories-database.stories.story
+          group: images-app
+          consumer:
+            use-native-decoding: true
+    schema:
+      avro:
+        dynamicSchemaGenerationEnabled: true

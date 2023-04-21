@@ -1,0 +1,39 @@
+{
+	"type": "record",
+	"name": "StoryEvent",
+	"namespace": "com.ahmedmq.boot.chatgpt.dalle.storyteller.images",
+	"fields": [
+		{
+			"name": "id",
+			"type": {
+				"type": "int",
+				"connect.default": 0
+			},
+			"default": 0
+		},
+		{
+			"name": "title",
+			"type": [
+				"null",
+				"string"
+			],
+			"default": null
+		},
+		{
+			"name": "scene",
+			"type": [
+				"null",
+				"string"
+			],
+			"default": null
+		},
+		{
+			"name": "created_at",
+			"type": {
+				"type": "long",
+				"connect.version": 1,
+				"connect.name": "io.debezium.time.MicroTimestamp"
+			}
+		}
+	]
+}

@@ -4,10 +4,10 @@ volumes:
 services:
   postgres:
     build: docker/postgres
-    container_name: postgres
+    container_name: stories-database
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
+      POSTGRES_DB: stories-database
+      POSTGRES_USER: stories
       POSTGRES_PASSWORD: password
     volumes:
       - postgresql-data:/var/lib/postgresql/data
