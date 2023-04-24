@@ -9,9 +9,10 @@ create table stories.story
 (
     id         serial    not null primary key,
     title      text,
-    detail     text,
+    description     text,
     characters text[],
     scene      text,
+    url        text,
     created_at timestamp not null
 );
 

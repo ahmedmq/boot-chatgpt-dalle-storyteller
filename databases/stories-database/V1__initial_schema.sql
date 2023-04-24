@@ -1,10 +1,11 @@
 create table story (
-    id serial not null primary key ,
-    title text ,
-    detail text,
-    characters text[],
-    scene text,
-    created_at timestamp not null
+   id         serial    not null primary key,
+   title      text,
+   description     text,
+   characters text[],
+   scene      text,
+   url        text,
+   created_at timestamp not null
 )
 
 create table character (

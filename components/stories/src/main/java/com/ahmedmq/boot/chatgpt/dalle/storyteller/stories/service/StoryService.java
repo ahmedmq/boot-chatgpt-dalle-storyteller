@@ -7,6 +7,7 @@ import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.chat.ChatCompleti
 import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.chat.ChatCompletionResponse;
 import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.chat.ChatMessage;
 import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.chat.ChatRole;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.image.ImageResult;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
@@ -53,5 +54,9 @@ public class StoryService {
             System.out.println("Unexpected output from OpenAI");
         }
 
+    }
+
+    public void updateStoryWithImage(Long storyId, ImageResult imageResult){
+        storyDataGateway.updateStoryImageUrl(storyId, imageResult.data().get(0).url());
     }
 }

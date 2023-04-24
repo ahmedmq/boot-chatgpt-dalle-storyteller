@@ -13,7 +13,15 @@ services:
       - postgresql-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-
+  stories-test-db:
+    build: docker/postgres
+    container_name: stories-test-db
+    environment:
+      POSTGRES_DB: stories-database
+      POSTGRES_USER: stories
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5450:5432"
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.1
     container_name: zookeeper
