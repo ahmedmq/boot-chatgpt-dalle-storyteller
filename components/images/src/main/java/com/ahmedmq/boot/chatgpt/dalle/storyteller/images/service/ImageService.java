@@ -25,9 +25,11 @@ public class ImageService {
         this.openAIClient = openAIClient;
     }
 
-    public void createImage(String prompt){
+    public ImageResult createImage(String prompt) {
         ImageResult imageResult = openAIClient.createImage(new CreateImageRequest(prompt));
-        logger.info("Image URL: {}",imageResult.data().get(0).url());
+        logger.info("Image URL: {}", imageResult.data().get(0).url());
+
+        return imageResult;
 
     }
 }

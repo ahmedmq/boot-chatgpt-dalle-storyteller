@@ -3,7 +3,7 @@ spring:
     schemaRegistryClient:
       endpoint:  http://localhost:8081/
     function:
-      definition: storyEventConsumer
+      definition: createStoryImageFunction
     stream:
       kafka:
         binder:
@@ -13,7 +13,10 @@ spring:
             schema.registry.url: http://localhost:8081
             specific.avro.reader: true
       bindings:
-        storyEventConsumer-in-0:
+        createStoryImageFunction-out-0:
+          destination: stories.images
+          content-type: application/json
+        createStoryImageFunction-in-0:
           content-type: application/*+avro
           destination: stories-database.stories.story
           group: images-app
