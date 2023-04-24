@@ -1,9 +1,9 @@
 package com.ahmedmq.boot.chatgpt.dalle.storyteller.images.service;
 
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.images.service.openai.OpenAIClient;
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.images.service.openai.model.CreateImageRequest;
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.images.service.openai.model.Image;
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.images.service.openai.model.ImageResult;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.OpenAIClient;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.image.CreateImageRequest;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.image.Image;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.image.ImageResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

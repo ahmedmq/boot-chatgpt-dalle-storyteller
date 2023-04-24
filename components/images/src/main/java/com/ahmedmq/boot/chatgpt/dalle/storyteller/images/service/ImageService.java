@@ -1,10 +1,10 @@
 package com.ahmedmq.boot.chatgpt.dalle.storyteller.images.service;
 
 
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.images.service.openai.OpenAIClient;
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.images.service.openai.OpenAIClientConfig;
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.images.service.openai.model.CreateImageRequest;
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.images.service.openai.model.ImageResult;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.OpenAIClient;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.OpenAIClientConfig;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.image.CreateImageRequest;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.image.ImageResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.EnableFeignClients;

@@ -1,4 +1,4 @@
-package com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.openai;
+package com.ahmedmq.boot.chatgpt.dalle.storyteller.openai;
 
 import feign.Logger;
 import feign.Request;
@@ -24,7 +24,7 @@ public class OpenAIClientConfig {
     @Value("${openai.api-key}")
     private String apiKey;
 
-    @Value("${openai.gpt-model}")
+    @Value("${openai.gpt-model:}")
     private String model;
 
     @Bean
@@ -48,6 +48,6 @@ public class OpenAIClientConfig {
     }
 
     public String getModel() {
-        return model;
+        return this.model;
     }
 }

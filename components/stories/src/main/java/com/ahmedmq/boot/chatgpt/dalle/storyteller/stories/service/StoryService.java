@@ -1,18 +1,17 @@
 package com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service;
 
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.openai.OpenAIClient;
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.openai.OpenAIClientConfig;
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.openai.model.ChatCompletionRequest;
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.openai.model.ChatCompletionResponse;
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.openai.model.ChatMessage;
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.openai.model.ChatRole;
+
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.OpenAIClient;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.OpenAIClientConfig;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.chat.ChatCompletionRequest;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.chat.ChatCompletionResponse;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.chat.ChatMessage;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.chat.ChatRole;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 
 @Service

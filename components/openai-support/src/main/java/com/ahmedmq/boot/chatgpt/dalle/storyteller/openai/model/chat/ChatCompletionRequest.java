@@ -1,4 +1,4 @@
-package com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.openai.model;
+package com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.chat;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.ahmedmq.boot.chatgpt.dalle.storyteller.images;
 
 import com.ahmedmq.boot.chatgpt.dalle.storyteller.images.service.ImageService;
-import com.ahmedmq.boot.chatgpt.dalle.storyteller.images.service.openai.model.ImageResult;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.image.ImageResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
