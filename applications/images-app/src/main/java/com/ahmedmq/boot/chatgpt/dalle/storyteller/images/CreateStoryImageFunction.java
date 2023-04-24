@@ -26,7 +26,7 @@ public class CreateStoryImageFunction implements Function<StoryEvent, Message<Im
         logger.info("Received: {}", storyEvent);
         ImageResult imageResult = imageService.createImage(storyEvent.getScene().toString());
         return MessageBuilder.withPayload(imageResult)
-                .setHeader("X-STORY-ID", storyEvent.getId())
+                .setHeader("X-STORY-ID", (long) storyEvent.getId())
                 .build();
     }
 }

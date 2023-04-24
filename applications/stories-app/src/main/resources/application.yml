@@ -20,5 +20,15 @@ spring:
     password: password
     url: jdbc:postgresql://localhost:5432/stories-database
     driver-class-name: org.postgresql.Driver
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:29092
+      bindings:
+        imageResultConsumer-in-0:
+          destination: stories.images
+          content-type: application/json
+          group: stories-app
 server:
   port: 9090
