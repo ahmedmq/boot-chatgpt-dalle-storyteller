@@ -22,3 +22,11 @@ spring:
     schema:
       avro:
         dynamicSchemaGenerationEnabled: true
+openai:
+  api-key: ${OPENAI-API-KEY}
+  http-client:
+    read-timeout: 3000
+    connect-timeout: 3000
+  urls:
+    base-url: https://api.openai.com/v1
+    image-url: /images/generations
