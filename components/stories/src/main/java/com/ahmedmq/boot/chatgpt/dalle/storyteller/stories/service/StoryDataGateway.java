@@ -91,4 +91,32 @@ public class StoryDataGateway {
     }
 
 
+    public Story getLatestStory() {
+        try(Connection connection = dataSource.getConnection()) {
+            try(PreparedStatement statement = connection.prepareStatement(
+                    "select id, title, description, characters, scene, url, created_at " +
+                            "from story " +
+                            "where url <> ''" +
+                            "order by created_at desc limit 1"
+            )){
+                try(ResultSet rs = statement.executeQuery()){
+                    if(rs.next()) {
+                        String[] characterArray = (String[]) rs.getArray(4).getArray();
+                        Timestamp createdAt = rs.getTimestamp(7);
+                        return new Story(rs.getLong(1),
+                                rs.getString(2),
+                                rs.getString(3),
+                                Arrays.stream(characterArray).toList(),
+                                rs.getString(5),
+                                rs.getString(6),
+                                createdAt.toInstant());
+                    }else {
+                        throw new RuntimeException("No rows found in table");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

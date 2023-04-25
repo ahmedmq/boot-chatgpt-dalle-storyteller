@@ -82,4 +82,16 @@ class StoryDataGatewayTest {
         assertThat(updatedStory.get().url()).isEqualTo("www.test.com");
 
     }
+
+    @Test
+    void testGetLatestStory() {
+        cut.saveStory("title1", "description1", new String[]{"one"}, "scene1");
+        cut.saveStory("title2", "description2", new String[]{"two"}, "scene2");
+
+        Story latestStory = cut.getLatestStory();
+
+        assertThat(latestStory.title()).isEqualTo("title2");
+        assertThat(latestStory.description()).isEqualTo("description2");
+        assertThat(latestStory.scene()).isEqualTo("scene2");
+    }
 }

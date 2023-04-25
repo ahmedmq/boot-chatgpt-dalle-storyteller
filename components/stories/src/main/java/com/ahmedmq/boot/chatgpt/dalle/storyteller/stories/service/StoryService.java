@@ -59,4 +59,8 @@ public class StoryService {
     public void updateStoryWithImage(Long storyId, ImageResult imageResult){
         storyDataGateway.updateStoryImageUrl(storyId, imageResult.data().get(0).url());
     }
+
+    public Story getStory() {
+        return storyDataGateway.getLatestStory();
+    }
 }

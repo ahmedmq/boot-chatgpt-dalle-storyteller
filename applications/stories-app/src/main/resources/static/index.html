@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Story Teller</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: "Comic Sans MS", cursive, sans-serif;
+            background-color: #fff8dc;
+        }
+        h1, p {
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #image-pane, #text-pane {
+            height: 500px;
+            overflow: auto;
+        }
+        #image-pane img {
+            max-width: 100%;
+            height: auto;
+        }
+        #text-pane p {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row mt-4 mb-2">
+        <div class="col">
+            <h1>AI story Teller 🤖 </h1>
+            <p>Create visual story using ChatGPT and DallE</p>
+            <button id="submit-task-btn" class="btn btn-primary float-right">Generate</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6" id="image-pane">
+            <img src="" alt="Story Image">
+        </div>
+        <div class="col-md-6" id="text-pane">
+            <p></p>
+        </div>
+    </div>
+</div>
+
+<script src="/webjars/bootstrap/dist/js/bootstrap.min.js"></script>
+<script>
+    fetch(`/getStory`).then(async response => {
+        const data = await response.json();
+        if(!response.ok) {
+            const error = (data && data.detail) || response.status;
+            return Promise.reject(error);
+        }
+        document.querySelector('#image-pane img').src = data.url;
+        document.querySelector('#text-pane p').textContent = data.text;
+    }).catch(error => {
+        console.log('Error fetching data:', error);
+    })
+</script>
+</body>
+</html>
