@@ -1,0 +1,35 @@
+spring:
+  cloud:
+    schemaRegistryClient:
+      endpoint:  http://localhost:8081/
+    function:
+      definition: createStoryImageFunction
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:29092
+          consumer-properties:
+            value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+            schema.registry.url: http://localhost:8081
+            specific.avro.reader: true
+      bindings:
+        createStoryImageFunction-out-0:
+          destination: stories.images
+          content-type: application/json
+        createStoryImageFunction-in-0:
+          content-type: application/*+avro
+          destination: stories-database.stories.story
+          group: images-app
+          consumer:
+            use-native-decoding: true
+    schema:
+      avro:
+        dynamicSchemaGenerationEnabled: true
+openai:
+  api-key: abc
+  http-client:
+    read-timeout: 3000
+    connect-timeout: 3000
+  urls:
+    base-url: https://api.openai.com/v1
+    image-url: /images/generations

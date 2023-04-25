@@ -5,46 +5,75 @@
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/dist/css/bootstrap.min.css">
     <style>
         body {
-            font-family: "Comic Sans MS", cursive, sans-serif;
-            background-color: #fff8dc;
+            background-image: url("https://images.unsplash.com/photo-1519791883288-dc8bd696e667?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2830&q=80&blend=111827&sat=-100&exp=30&blend-mode=multiply");
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            isolation: isolate;
+            overflow: hidden;
+            position: relative;
+            background-color: #111827;
         }
-        h1, p {
-            text-align: center;
-        }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
+            padding-top: 80px;
         }
-        #image-pane, #text-pane {
-            height: 500px;
-            overflow: auto;
+
+        .container-title {
+            display: flex;
+            position: relative;
+            align-items: center;
         }
+
+        #title h1 {
+            color: #ffffff;
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
         #image-pane img {
-            max-width: 100%;
-            height: auto;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            opacity: 0.8;
+
         }
+
         #text-pane p {
-            font-size: 18px;
-            line-height: 1.5;
-            margin-bottom: 20px;
+            margin-top: 1.5rem;
+            color: #D1D5DB;
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+            line-height: 2rem;
+            overflow: scroll;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="row mt-4 mb-2">
-        <div class="col">
-            <h1>AI story Teller 🤖 </h1>
-            <p>Create visual story using ChatGPT and DallE</p>
-            <button id="submit-task-btn" class="btn btn-primary float-right">Generate</button>
+    <div class="row">
+        <div style="text-align: left;">
+            <div class="container-title">
+                <div class="col" id="title">
+                    <h1></h1>
+                    <button id="submit-task-btn" class="btn btn-primary">Generate</button>
+                    -->
+                </div>
+                <div class="col">
+                    <div class="thumbnail" id="image-pane">
+                        <img height="256" width="256"/>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6" id="image-pane">
-            <img src="" alt="Story Image">
-        </div>
-        <div class="col-md-6" id="text-pane">
-            <p></p>
+        <div class="col" id="text-pane">
         </div>
     </div>
 </div>
@@ -53,15 +82,39 @@
 <script>
     fetch(`/getStory`).then(async response => {
         const data = await response.json();
-        if(!response.ok) {
+        if (!response.ok) {
             const error = (data && data.detail) || response.status;
             return Promise.reject(error);
         }
+        document.querySelector('#title h1').textContent = data.title;
         document.querySelector('#image-pane img').src = data.url;
-        document.querySelector('#text-pane p').textContent = data.text;
+        // document.querySelector('#text-pane p').textContent = data.description;
+
+        const myContainer = document.querySelector("#text-pane");
+        const paragraphs = data.description.split("\n\n");
+        for (let i = 0; i < paragraphs.length; i++) {
+            const paragraph = document.createElement("p");
+            paragraph.textContent = paragraphs[i];
+            myContainer.appendChild(paragraph);
+        }
+
+
     }).catch(error => {
         console.log('Error fetching data:', error);
     })
+</script>
+
+<script>
+    const submitTaskBtn = document.getElementById('submit-task-btn');
+    submitTaskBtn.addEventListener('click', () => {
+        submitTaskBtn.disabled = true;
+        fetch('/generate', {
+            method: 'POST',
+        })
+            .catch(error => {
+                console.log('Error submitting task:', error);
+            });
+    });
 </script>
 </body>
 </html>

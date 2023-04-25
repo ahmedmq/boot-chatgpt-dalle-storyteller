@@ -11,5 +11,7 @@ openai:
     read-timeout: 3000
     connect-timeout: 3000
   urls:
-    base-url: <<OVERRIDDEN BY WIREMOCK>>
+    base-url: https://api.openai.com/v1
     chat-url: /chat/completions
+
+

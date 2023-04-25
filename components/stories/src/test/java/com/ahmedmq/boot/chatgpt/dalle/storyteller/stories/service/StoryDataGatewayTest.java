@@ -51,7 +51,7 @@ class StoryDataGatewayTest {
                     assertThat(resultSet.getString(3)).isEqualTo("description");
                     assertThat((String[]) resultSet.getArray(4).getArray()).isEqualTo( new String[]{"new"});
                     assertThat(resultSet.getString(5)).isEqualTo("scene");
-                    assertThat(resultSet.getTimestamp(6)).isNotNull();
+                    assertThat(resultSet.getTimestamp(7)).isNotNull();
                 }
 
             }
@@ -86,12 +86,15 @@ class StoryDataGatewayTest {
     @Test
     void testGetLatestStory() {
         cut.saveStory("title1", "description1", new String[]{"one"}, "scene1");
-        cut.saveStory("title2", "description2", new String[]{"two"}, "scene2");
+        Long savedStoryId = cut.saveStory("title2", "description2", new String[]{"two"}, "scene2");
+        cut.updateStoryImageUrl(savedStoryId, "www.example.com");
 
         Story latestStory = cut.getLatestStory();
 
+        assertThat(latestStory.id()).isEqualTo(savedStoryId);
         assertThat(latestStory.title()).isEqualTo("title2");
         assertThat(latestStory.description()).isEqualTo("description2");
         assertThat(latestStory.scene()).isEqualTo("scene2");
+        assertThat(latestStory.url()).isEqualTo("www.example.com");
     }
 }
