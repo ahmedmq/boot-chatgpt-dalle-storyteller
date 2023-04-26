@@ -15,11 +15,10 @@ public class StoryController {
         this.storyService = storyService;
     }
 
-
     @GetMapping("/getStory")
-    public StoryData getStory(){
+    public StoryDto getStory(){
         Story story = storyService.getStory();
-        return new StoryData(story.title(), story.description(), story.url());
+        return new StoryDto(story.title(), story.description(), story.url());
     }
 
     @PostMapping("/generate")
@@ -27,6 +26,6 @@ public class StoryController {
         storyService.createStory();
     }
 
-    record StoryData(String title, String description, String url){}
+    record StoryDto(String title, String description, String url){}
 
 }
