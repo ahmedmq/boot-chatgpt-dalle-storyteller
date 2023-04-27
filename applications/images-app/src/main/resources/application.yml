@@ -22,9 +22,6 @@ spring:
           group: images-app
           consumer:
             use-native-decoding: true
-    schema:
-      avro:
-        dynamicSchemaGenerationEnabled: true
 openai:
   api-key: ${OPENAI-API-KEY}
   http-client:

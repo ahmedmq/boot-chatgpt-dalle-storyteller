@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -38,6 +39,9 @@ class ImageResultConsumerIT {
 
     @Container
     static KafkaContainer kafkaContainer = new KafkaContainer();
+
+    @Container
+    static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres");
 
     @Autowired
     StoryDataGateway storyDataGateway;

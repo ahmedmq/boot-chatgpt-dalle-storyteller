@@ -30,5 +30,8 @@ spring:
           destination: stories.images
           content-type: application/json
           group: stories-app
+  flyway:
+    locations: filesystem:databases/stories-database
+    enabled: true
 server:
   port: 9090

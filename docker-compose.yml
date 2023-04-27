@@ -2,26 +2,24 @@ version: "3.7"
 volumes:
   postgresql-data: {}
 services:
-  postgres:
-    build: docker/postgres
+  stories-db:
+    image: postgres:14-bullseye
     container_name: stories-database
+    restart: always
     environment:
       POSTGRES_DB: stories-database
       POSTGRES_USER: stories
       POSTGRES_PASSWORD: password
+    command: [ "postgres", "-c", "wal_level=logical" ]
+    healthcheck:
+      test: [ "CMD", "psql", "-U", "postgres", "-c", "SELECT 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - postgresql-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-  stories-test-db:
-    build: docker/postgres
-    container_name: stories-test-db
-    environment:
-      POSTGRES_DB: stories-database
-      POSTGRES_USER: stories
-      POSTGRES_PASSWORD: password
-    ports:
-      - "5450:5432"
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.1
     container_name: zookeeper
@@ -32,6 +30,9 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
     healthcheck:
       test: "echo stat | nc localhost $$ZOOKEEPER_CLIENT_PORT"
+      start_period: 10s
+      retries: 20
+      interval: 10s
 
   kafka:
     image: confluentinc/cp-kafka:7.3.1
@@ -50,6 +51,10 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "9092" ]
+      start_period: 15s
+      interval: 5s
+      timeout: 10s
+      retries: 10
 
   kafka-ui:
     container_name: kafka-ui
@@ -65,7 +70,7 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
       KAFKA_CLUSTERS_0_METRICS_PORT: 9997
       KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
-      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: first
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: kafka-connect
       KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://kafka-connect:8083
 
   schema-registry:
@@ -81,7 +86,10 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
     healthcheck:
-      test: "curl -f http://localhost:8081 || exit 1"
+      test: curl --user superUser:superUser --fail --silent --insecure http://localhost:8081/subjects --output /dev/null || exit 1
+      start_period: 10s
+      interval: 10s
+      retries: 20
 
   kafka-connect:
     build: docker/kafka-connect
@@ -115,5 +123,9 @@ services:
       CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
       CONNECT_PLUGIN_PATH: "/usr/share/java"
     healthcheck:
-      test: "curl -f http://localhost:$$CONNECT_REST_PORT || exit 1"
+      test: ["CMD", "curl", "--silent", "--fail", "-X", "GET", "http://localhost:8083/connectors"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
