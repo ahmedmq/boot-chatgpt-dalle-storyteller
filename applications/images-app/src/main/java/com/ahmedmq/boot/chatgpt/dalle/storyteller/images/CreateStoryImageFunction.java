@@ -24,7 +24,7 @@ public class CreateStoryImageFunction implements Function<StoryEvent, Message<Im
     @Override
     public Message<ImageResult> apply(StoryEvent storyEvent) {
         logger.info("Received: {}", storyEvent);
-        ImageResult imageResult = imageService.createImage(storyEvent.getScene().toString());
+        ImageResult imageResult = imageService.createImage(storyEvent.getScene().toString()+" cartoon");
         return MessageBuilder.withPayload(imageResult)
                 .setHeader("X-STORY-ID", (long) storyEvent.getId())
                 .build();
