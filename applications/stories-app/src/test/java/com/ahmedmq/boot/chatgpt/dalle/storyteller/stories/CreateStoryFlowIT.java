@@ -4,12 +4,13 @@ import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.image.Image;
 import com.ahmedmq.boot.chatgpt.dalle.storyteller.openai.model.image.ImageResult;
 import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.Story;
 import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.StoryDataGateway;
+import com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service.StoryService;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.binder.test.InputDestination;
-import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
-import org.springframework.context.annotation.Import;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -25,14 +26,17 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
-@Import(TestChannelBinderConfiguration.class)
 @Testcontainers
 @ActiveProfiles("test")
-class ImageResultConsumerIT {
+class CreateStoryFlowIT {
 
     @Autowired
     InputDestination inputDestination;
@@ -41,28 +45,49 @@ class ImageResultConsumerIT {
     static KafkaContainer kafkaContainer = new KafkaContainer();
 
     @Container
-    static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres");
+    static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:14-bullseye")
+            .withDatabaseName("stories-database")
+            .withUsername("stories")
+            .withPassword("password");
+
+    @RegisterExtension
+    static WireMockExtension wireMockServer = WireMockExtension
+            .newInstance()
+            .options(wireMockConfig().dynamicPort())
+            .build();
 
     @Autowired
     StoryDataGateway storyDataGateway;
 
+    @Autowired
+    StoryService storyService;
+
     @DynamicPropertySource
     static void register(DynamicPropertyRegistry registry){
         registry.add("spring.cloud.stream.kafka.binder.brokers", kafkaContainer::getBootstrapServers);
-        registry.add("spring.datasource.url", ()-> "jdbc:postgresql://localhost:5450/stories-database");
-        registry.add("spring.datasource.username", ()->"stories");
-        registry.add("spring.datasource.password", ()->"password");
+        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.password",postgreSQLContainer::getPassword);
+        registry.add("openai.urls.base-url", wireMockServer::baseUrl);
     }
 
     @Test
     void testFlow() {
 
-        Long savedStoryId = storyDataGateway.saveStory("title", "description", new String[]{"new"}, "scene");
+        wireMockServer.stubFor(
+                post("/chat/completions")
+                        .withHeader("Authorization", equalTo("Bearer abc"))
+                        .withHeader("Content-Type", equalTo("application/json"))
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader("Content-Type", "application/json")
+                                        .withBodyFile("chat-completion-response.json")
+                        )
+        );
 
-        Optional<Story> story = storyDataGateway.getStoryById(savedStoryId);
-
-        assertThat(story).isNotEmpty();
-        assertThat(story.get().url()).isNull();
+        Long storyId = storyService.createStory();
+        assertThat(storyId).isNotNull();
 
         ImageResult imageResult = new ImageResult(
                 Instant.now().toEpochMilli(),
@@ -71,11 +96,11 @@ class ImageResultConsumerIT {
         inputDestination.send(
                 MessageBuilder
                         .withPayload(imageResult)
-                        .setHeader("X-STORY-ID", savedStoryId)
+                        .setHeader("X-STORY-ID", storyId)
                         .build(),
                 "stories.images");
 
-        await().atMost(10, TimeUnit.SECONDS).until(urlUpdated(savedStoryId));
+        await().atMost(10, TimeUnit.SECONDS).until(urlUpdated(storyId));
 
     }
 

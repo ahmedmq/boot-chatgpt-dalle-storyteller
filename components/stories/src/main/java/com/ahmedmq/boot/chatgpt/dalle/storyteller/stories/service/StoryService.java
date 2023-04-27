@@ -31,7 +31,7 @@ public class StoryService {
         this.storyDataGateway = storyDataGateway;
     }
 
-    public void createStory() {
+    public Long createStory() {
         String[] characters = new String[]{"Ethan", "Lisa"};
         String scene = "Pair programming together when suddenly powers shuts off";
         String prompt = """
@@ -49,11 +49,10 @@ public class StoryService {
         String story = Objects.requireNonNullElse(chatCompletionResponse.choices().get(0).message().content(),"");
         String[] parts = story.split("\n", 2);
         if ( parts.length == 2) {
-            storyDataGateway.saveStory(parts[0].substring(6), parts[1], characters, scene);
+            return storyDataGateway.saveStory(parts[0].substring(6), parts[1], characters, scene);
         }else {
-            System.out.println("Unexpected output from OpenAI");
+            throw new RuntimeException("Unexpected output from OpenAI");
         }
-
     }
 
     public void updateStoryWithImage(Long storyId, ImageResult imageResult){

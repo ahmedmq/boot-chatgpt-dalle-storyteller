@@ -32,6 +32,9 @@ class CreateStoryServiceTest {
     @Mock
     OpenAIClientConfig openAIClientConfig;
 
+    @Mock
+    StoryDataGateway storyDataGateway;
+
     @InjectMocks
     StoryService sut;
 
@@ -41,7 +44,7 @@ class CreateStoryServiceTest {
         ChatCompletionChoice chatCompletionChoice =
                 new ChatCompletionChoice(
                         new ChatMessage(ChatRole.assistant,
-                                "")
+                                "Title: \nHello World!")
                 );
 
         ChatCompletionResponse chatCompletionResponse =
@@ -57,7 +60,11 @@ class CreateStoryServiceTest {
 
         when(openAIClientConfig.getModel()).thenReturn("gpt-3.5-turbo");
 
-        sut.createStory();
+        when(storyDataGateway.saveStory(any(),any(),any(),any())).thenReturn(1L);
+
+        Long storyId = sut.createStory();
+
+        assertThat(storyId).isEqualTo(1L);
 
         ArgumentCaptor<ChatCompletionRequest> captor = ArgumentCaptor.forClass(ChatCompletionRequest.class);
 

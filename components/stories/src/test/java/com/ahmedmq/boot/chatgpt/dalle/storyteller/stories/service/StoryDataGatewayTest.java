@@ -1,6 +1,7 @@
 package com.ahmedmq.boot.chatgpt.dalle.storyteller.stories.service;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.postgresql.ds.PGSimpleDataSource;
 
@@ -13,7 +14,10 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 class StoryDataGatewayTest {
+
+    // Need access to a PostgreSQL Datbase
 
     public DataSource dataSource() {
         PGSimpleDataSource ds = new PGSimpleDataSource();
