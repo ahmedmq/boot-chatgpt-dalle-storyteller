@@ -1,4 +1,4 @@
-CREATE SCHEMA stories;
+CREATE SCHEMA IF NOT EXISTS stories;
 
 create table stories.story
 (

@@ -33,5 +33,6 @@ spring:
   flyway:
     locations: filesystem:databases/stories-database
     enabled: true
+    default-schema: stories
 server:
   port: 9090
